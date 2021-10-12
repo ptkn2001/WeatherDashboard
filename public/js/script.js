@@ -48,7 +48,7 @@ const saveHistory = (history) => {
 
 //get weather forcast data from API
 const getWeatherDataForCity = async(city) => {
-    const requestUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`
+    const requestUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`
 
     const response = await fetch(requestUrl, {
         method: 'GET',
