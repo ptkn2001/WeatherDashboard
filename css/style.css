@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    line-height: 1;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+.card {
+    height: 300px;
+}
+
+.history-city:hover {
+    cursor: pointer;
+}
+
+.search-input {
+    border-top-left-radius: .5em;
+    border: solid 1px;
+    font-size: large;
+}
+
+.list-group-item {
+    font-size: larger;
+    border-radius: .5em;
+    margin-bottom: 20px;
+}
+
+.search-button {
+    font-size: large;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top-right-radius: .5em;
+}
