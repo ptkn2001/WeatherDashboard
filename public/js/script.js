@@ -62,8 +62,6 @@ const getWeatherDataForCity = async(city) => {
             responseData = data;
         });
 
-    } else {
-        alert('Unable to get data from Weather API');
     }
 
     if (!responseData) { return };
@@ -157,9 +155,9 @@ const generateMainSection = (historyData, currentData, forcastData) => {
     return `
 <div class="row">
     <div class="container col-3 pl-2">
-        <div class="container d-flex row search-container p-3 m-0 justify-content-center" style="border-bottom: 2px solid;">
+        <div class="container search-container p-3 " style="border-bottom: 2px solid;">
             <input type="text" class="search-input p-2" id="search_input" placeholder="Search By City">
-            <button class="search-button bg-primary text-light" id="search_button">Search</button>
+            <button class="search-button bg-primary text-light p-2 mt-2" id="search_button">Search</button>
         </div>
         <div class="container history-container p-3 m-0 col">
             <ul class="list-group list-group-flush" id="search_history_list">
@@ -217,14 +215,14 @@ const loadMainData = async(city) => {
         };
     }
 
-    saveHistory(history);
-
     let cityData = await getWeatherDataForCity(history[0]);
 
     if (!cityData) {
         alert('Sorry, we are experiencing difficulty getting Weather data.  Please try again later.')
         return;
     }
+
+    saveHistory(history);
 
     let currentData = generateCurrentInfo(cityData)
 
