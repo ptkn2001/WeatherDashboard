@@ -45,3 +45,7 @@ ul {
     padding-right: 10px;
     border-top-right-radius: .5em;
 }
+
+.search-input {
+    max-width: 7.5em;
+}
