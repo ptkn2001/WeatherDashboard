@@ -24,7 +24,6 @@ const rainOrShine = (typeOfWeather) => {
         default:
             break;
     }
-
     return weatherType;
 }
 
@@ -57,11 +56,9 @@ const getWeatherDataForCity = async(city) => {
     let responseData;
 
     if (response.ok) {
-
         await response.json().then((data) => {
             responseData = data;
         });
-
     }
 
     if (!responseData) { return };
@@ -157,7 +154,6 @@ const generateMainSection = (historyData, currentData, forcastData) => {
             </ul>
         </div>
     </div>
-
     <div class="container col-9">
         <div class="container current-container m-2" style="border: solid 1px; width:auto">
         ${currentData}
@@ -167,7 +163,6 @@ const generateMainSection = (historyData, currentData, forcastData) => {
         ${forcastData}
         </div>
     </div>
-
 </div>
 `
 }
@@ -188,11 +183,20 @@ const loadNewCityHandler = (event) => {
     }
 }
 
-//processing the data for the main section
+//processing the data and build the main section in the index.html
+//we are using que to store and accessing history data for cities
 const loadMainData = async(city) => {
+    //first we get the history from local storage if there's any
     let history = getHistory();
 
+    //three ways that the data in the main section can be loaded.
+    //1. when the app first load - city not passed
+    //2. from the city search - city passed
+    //3. from clicking on the city in the history list - city passed
     if (city) {
+        //when city is passed:
+        //if there is no history. we create a new city list and store the first city.
+        //else we find the city in the history and move it to the top of the que.
         if (!history) {
             history = [];
             history.push(city);
@@ -200,6 +204,10 @@ const loadMainData = async(city) => {
             history = history.filter(item => item !== city);
             history.unshift(city);
         }
+        //when city is NOT passed:
+        //if there's no city history in the local storage, we add Seattle (default city) to the que.
+        //we need at least one city in the que.
+        //else whichever city was on the top of the que from the last run will be loaded.
     } else {
         if (!history) {
             history = [];
@@ -207,39 +215,41 @@ const loadMainData = async(city) => {
         };
     }
 
+    //get the forcast data for the city from a third party API
     let cityData = await getWeatherDataForCity(history[0]);
-
     if (!cityData) {
         alert('Sorry, we are experiencing difficulty getting Weather data.  Please try again later.')
         return;
     }
 
+    //saving history only after successfully get the data for the city.
+    //this is to prevent accidently saving an incorrect city in the history if the user typed in the wrong city name.  
     saveHistory(history);
 
+    //the main section consists of 3 sections: CurrentInfo, HistoryItems, ForcastDays
+    //first generate the CurrentInfo section
     let currentData = generateCurrentInfo(cityData)
 
     let historyData = [];
 
+    //second generate the HistoryItems section
     for (i = 0; i < history.length; i++) {
-        if (i == 0) {
-            historyData.push(generateHistoryItem(history[i], true));
-        } else {
-            historyData.push(generateHistoryItem(history[i], false));
-        }
+        historyData.push(generateHistoryItem(history[i], (i ? false : true)));
     }
 
     const forcast = cityData.forcast;
-
     let forcastData = [];
 
+    //third generate the ForcastDays section
     for (i = 0; i < forcast.length; i++) {
         forcastData.push(generateForcastDay(forcast[i]));
     }
 
+    //finally combine the 3 sections to make the main section.
     const mainData = generateMainSection(historyData.join(''), currentData, forcastData.join(''));
-
     mainElement.innerHTML = mainData;
 
+    //now that the index.html is fully loaded, we add event listeners and attach the event handlers
     const searchIconElement = document.querySelector('#search_button');
     searchIconElement.addEventListener('click', searchCityHandler);
 
