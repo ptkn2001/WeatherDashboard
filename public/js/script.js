@@ -113,15 +113,7 @@ const getWeatherDataForCity = async(city) => {
 
 //generate the history elements
 const generateHistoryItem = (city, isCurrent) => {
-    let backgroundColor;
-
-    if (isCurrent) {
-        backgroundColor = 'bg-primary';
-    } else {
-        backgroundColor = 'bg-secondary';
-    }
-
-    return `<li class="list-group-item history-city ${backgroundColor} d-flex justify-content-center text-light">${city}</li>`;
+    return `<li class="list-group-item history-city ${isCurrent ? 'bg-primary' : 'bg-secondary'} d-flex justify-content-center text-light">${city}</li>`;
 }
 
 //generate the current day weather info
